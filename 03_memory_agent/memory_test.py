@@ -57,8 +57,10 @@ def test_memory_persistence():
             print(f"🤖 Answer: {response.content}")
             
             # Check if memory references are included
-            if hasattr(response, 'extra_data') and response.extra_data.references:
+            if hasattr(response, 'extra_data') and response.extra_data and hasattr(response.extra_data, 'references') and response.extra_data.references:
                 print(f"\n📚 Memory References: {len(response.extra_data.references)} found")
+            elif hasattr(response, 'references') and response.references:
+                print(f"\n📚 Memory References: {len(response.references)} found")
             
         except Exception as e:
             print(f"❌ Error: {e}")

@@ -14,6 +14,8 @@ from dotenv import load_dotenv
 from agno.agent import Agent
 from agno.models.openai import OpenAIChat
 from agno.tools.reasoning import ReasoningTools
+from agno.memory.v2.db.sqlite import SqliteMemoryDb
+from agno.memory.v2.memory import Memory
 
 # Load environment variables
 load_dotenv()
@@ -26,17 +28,31 @@ def create_memory_agent(session_name=None):
         session_name: Optional name for the session. If None, a new session is created.
     """
     
+    # Initialize proper Agno memory system
+    memory = Memory(
+        # Use the same model for creating and managing memories
+        model=OpenAIChat(id="gpt-4o"),
+        # Store memories in a SQLite database
+        db=SqliteMemoryDb(
+            table_name=f"user_memories_{session_name or 'default'}", 
+            db_file=f"memory_{session_name or 'default'}.db"
+        ),
+        # We disable deletion by default, enable it if needed
+        delete_memories=True,
+        clear_memories=True,
+    )
+    
     # Create the agent with memory and reasoning capabilities
     agent = Agent(
         name="Memory-Enabled Assistant",
-        role="A helpful assistant that remembers conversations and uses reasoning",
+        role="A helpful assistant that remembers conversations and provides thoughtful responses",
         model=OpenAIChat(id="gpt-4o"),
         tools=[
             ReasoningTools(add_instructions=True),
         ],
         instructions=[
             "You have memory of our previous conversations",
-            "Use reasoning tools to work through complex problems step by step",
+            "Work through complex problems step by step",
             "Reference previous discussions when relevant",
             "Be consistent with your previous advice",
             "Learn from our conversation history to provide better responses",
@@ -50,16 +66,20 @@ def create_memory_agent(session_name=None):
         enable_session_summaries=True,
         add_memory_references=True,
         add_session_summary_references=True,
-        # Enable reasoning
-        reasoning=True,
-        reasoning_min_steps=2,
-        reasoning_max_steps=8,
+        # Disable reasoning due to current compatibility issues
+        reasoning=False,
+        # reasoning_min_steps=2,
+        # reasoning_max_steps=8,
         # Session management
         session_name=session_name,
         cache_session=True,
         add_history_to_messages=True,
         num_history_responses=5,
         num_history_sessions=3,
+        # Set the memory system
+        memory=memory,
+        # User ID for storing memories
+        user_id=session_name or "default",
     )
     
     return agent
@@ -80,8 +100,9 @@ def demonstrate_memory_capabilities():
     print(f"🛠️  Tools: {len(agent.tools)} tools available")
     print(f"📝 Instructions: {len(agent.instructions)} instructions set")
     print(f"🧠 Memory: Agentic memory enabled")
-    print(f"💭 Reasoning: Advanced reasoning enabled")
+    print(f"💭 Reasoning: Disabled (compatibility mode)")
     print(f"📚 Session: '{session_name}'")
+    print(f"🗄️  Database: Agno SQLite memory database")
     print()
     
     # First conversation - establish context

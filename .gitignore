@@ -91,6 +91,7 @@ knowledge_db/
 *.db
 *.sqlite
 *.sqlite3
+memory_*.db
 
 # Logs
 *.log
