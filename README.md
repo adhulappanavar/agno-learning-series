@@ -59,6 +59,7 @@ Learn the fundamentals of Agno agents:
 - Basic agent interaction patterns
 
 **Files**: `basic_agent.py`, `run_example.py`, `setup.md`
+**Sample Output**: Included in README showing calculation and reasoning examples
 
 ### Example 2: Knowledge Agent
 Build agents that can learn and remember:
@@ -67,6 +68,7 @@ Build agents that can learn and remember:
 - Information retrieval capabilities
 
 **Files**: `knowledge_agent.py`, `run_example.py`, `sample_documents/`
+**Sample Output**: Included in README showing knowledge loading and Q&A examples
 
 ### Example 3: Memory Agent
 Create agents with persistent memory:
@@ -75,6 +77,7 @@ Create agents with persistent memory:
 - Advanced reasoning workflows
 
 **Files**: `memory_agent.py`, `memory_test.py`, `run_example.py`
+**Sample Output**: Included in README showing memory and reasoning capabilities
 
 ### Example 4: Team Agents (Coming Soon)
 Learn multi-agent collaboration:
@@ -97,6 +100,8 @@ OPENAI_API_KEY=your_openai_api_key_here
 ```
 
 **Important**: Never commit your `.env` files! They're already excluded by `.gitignore`.
+
+**Note**: You'll need to create a `.env` file in each example directory (`01_basic_agent/`, `02_knowledge_agent/`, `03_memory_agent/`) with your OpenAI API key.
 
 ## 🛠️ Development
 
