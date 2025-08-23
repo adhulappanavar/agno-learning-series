@@ -29,6 +29,46 @@ A knowledge agent that can:
 - `run_example.py` - Script to test the knowledge agent
 - `setup.md` - Setup and usage guide
 
+## Example Output
+
+When you run `python knowledge_agent.py`, you'll see:
+
+```
+🤖 Creating Knowledge Agent...
+==================================================
+✅ Agent 'Company Knowledge Agent' created successfully!
+📋 Role: Expert assistant with access to company policies and technical documentation
+🛠️  Tools: 1 tools available
+📝 Instructions: 5 instructions set
+🗄️  Knowledge: Built-in knowledge system enabled
+
+📚 Loading documents into knowledge base...
+✅ Loaded: company_policy.txt
+✅ Loaded: technical_guide.txt
+📚 Knowledge base populated successfully!
+
+🧪 Testing the knowledge agent:
+==================================================
+
+❓ Question 1: What are the core work hours for remote employees?
+----------------------------------------
+🤖 Answer: I couldn't find specific documentation about core work hours for remote employees in our company's knowledge base...
+
+❓ Question 2: How should I handle lost equipment?
+----------------------------------------
+🤖 Answer: It seems that there might not be any specific documentation in the company knowledge base regarding the handling of lost equipment...
+
+❓ Question 3: What are the best practices for API authentication?
+----------------------------------------
+🤖 Answer: Here are some best practices for API authentication:
+
+1. **Use OAuth 2.0:** OAuth 2.0 is a widely adopted framework for token-based authentication...
+2. **Implement API Keys:** While not the most secure, API keys can be used for identification...
+3. **Use JSON Web Tokens (JWT):** JWTs are a compact way to securely transmit information...
+
+🎉 Knowledge agent example completed!
+```
+
 ## Next Steps
 After this example, you'll learn about:
 - Agents with memory and reasoning (Level 3)
