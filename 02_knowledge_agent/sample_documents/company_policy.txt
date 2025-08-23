@@ -1,0 +1,44 @@
+Company Policy: Remote Work Guidelines
+
+Effective Date: January 1, 2024
+
+1. WORK SCHEDULE
+- Core hours: 10:00 AM - 3:00 PM EST (flexible outside these hours)
+- Must be available for team meetings during core hours
+- Update status to "available" when working
+
+2. COMMUNICATION
+- Use Slack for quick questions and updates
+- Schedule video calls for complex discussions
+- Respond to messages within 2 hours during work hours
+- Use email for formal communications and documentation
+
+3. PRODUCTIVITY EXPECTATIONS
+- Maintain same productivity standards as office work
+- Use time tracking tools as required by your manager
+- Report any technical issues immediately
+- Keep your manager updated on project progress
+
+4. EQUIPMENT AND SECURITY
+- Use company-provided laptop and software
+- Connect to company VPN when accessing sensitive data
+- Lock your computer when stepping away
+- Report lost or stolen equipment within 24 hours
+
+5. MEETING ETIQUETTE
+- Join video calls 5 minutes early
+- Use headphones to reduce background noise
+- Mute microphone when not speaking
+- Use virtual backgrounds if needed
+
+6. TIME OFF AND LEAVE
+- Submit PTO requests at least 2 weeks in advance
+- Use the HR portal for all leave requests
+- Coordinate with your team before taking extended leave
+- Emergency time off: notify manager immediately
+
+7. PERFORMANCE EVALUATION
+- Quarterly performance reviews
+- Monthly 1:1 meetings with manager
+- Annual goal setting and review
+- Continuous feedback through regular check-ins
