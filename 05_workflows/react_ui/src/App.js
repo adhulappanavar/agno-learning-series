@@ -5,10 +5,44 @@ import ReactFlow, {
   Background,
   useNodesState,
   useEdgesState,
-  addEdge
+  addEdge,
+  Handle,
+  Position
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import './App.css';
+
+// Custom node component with tooltip
+const CustomNode = ({ data }) => {
+  const [showTooltip, setShowTooltip] = useState(false);
+  
+  return (
+    <div 
+      className="custom-node"
+      onMouseEnter={() => setShowTooltip(true)}
+      onMouseLeave={() => setShowTooltip(false)}
+    >
+      <Handle type="target" position={Position.Top} />
+      <div className="node-content">
+        <div className="node-label">{data.label}</div>
+        {showTooltip && (
+          <div className="node-tooltip">
+            <strong>{data.label}</strong>
+            <p>{data.description}</p>
+            <div className="tooltip-status">
+              Status: <span className={`status-${data.status}`}>{data.status}</span>
+            </div>
+          </div>
+        )}
+      </div>
+      <Handle type="source" position={Position.Bottom} />
+    </div>
+  );
+};
+
+const nodeTypes = {
+  custom: CustomNode,
+};
 
 function App() {
   const [workflows, setWorkflows] = useState([]);
@@ -94,67 +128,110 @@ function App() {
     let descriptions = {};
     
     if (workflow.id.includes('financial')) {
-      stages = ['Planning', 'Data Processing', 'Business Logic', 'Approval', 'Finalization'];
+      stages = ['Requirements Analysis', 'Financial Modeling', 'Risk Assessment', 'Compliance Check', 'Budget Approval', 'Execution', 'Audit & Reporting'];
       descriptions = {
-        'Planning': 'Analyze financial requirements and create strategic plans',
-        'Data Processing': 'Process financial data and validate inputs',
-        'Business Logic': 'Apply financial rules and calculations',
-        'Approval': 'Review and approve financial decisions',
-        'Finalization': 'Execute approved plans and generate reports'
+        'Requirements Analysis': 'Analyze financial requirements, gather stakeholder input, define project scope and budget constraints',
+        'Financial Modeling': 'Create financial projections, cash flow analysis, ROI calculations, and scenario planning',
+        'Risk Assessment': 'Identify financial risks, market volatility analysis, stress testing, and risk mitigation strategies',
+        'Compliance Check': 'Verify regulatory compliance, internal policy adherence, and legal requirements validation',
+        'Budget Approval': 'Present to stakeholders, obtain executive approval, secure funding allocation',
+        'Execution': 'Implement approved financial plan, monitor progress, adjust strategies as needed',
+        'Audit & Reporting': 'Generate financial reports, conduct audits, document outcomes and lessons learned'
       };
     } else if (workflow.id.includes('data')) {
-      stages = ['Planning', 'Data Processing', 'Business Logic', 'Approval', 'Finalization'];
+      stages = ['Data Discovery', 'Source Validation', 'ETL Processing', 'Quality Assurance', 'Transformation', 'Testing', 'Deployment'];
       descriptions = {
-        'Planning': 'Design data processing workflow and requirements',
-        'Data Processing': 'Extract, transform, and validate data',
-        'Business Logic': 'Apply business rules and data integrity checks',
-        'Approval': 'Review data quality and processing results',
-        'Finalization': 'Generate processed data and quality metrics'
+        'Data Discovery': 'Identify data sources, assess data quality, map data relationships and dependencies',
+        'Source Validation': 'Verify data source authenticity, check data lineage, validate source system integrity',
+        'ETL Processing': 'Extract data from sources, transform according to business rules, load into target systems',
+        'Quality Assurance': 'Run data quality checks, identify anomalies, validate data completeness and accuracy',
+        'Transformation': 'Apply business logic, data cleansing, aggregation, and business rule implementation',
+        'Testing': 'Validate transformed data, run test scenarios, verify business logic correctness',
+        'Deployment': 'Deploy to production, monitor performance, establish data governance and monitoring'
+      };
+    } else if (workflow.id.includes('business')) {
+      stages = ['Market Research', 'Strategy Development', 'Stakeholder Alignment', 'Resource Planning', 'Implementation', 'Performance Monitoring', 'Optimization'];
+      descriptions = {
+        'Market Research': 'Analyze market conditions, competitive landscape, customer needs, and business opportunities',
+        'Strategy Development': 'Define business objectives, develop strategic initiatives, create action plans and timelines',
+        'Stakeholder Alignment': 'Engage key stakeholders, align on objectives, secure buy-in and commitment',
+        'Resource Planning': 'Allocate resources, budget planning, team assignment, and timeline development',
+        'Implementation': 'Execute strategic initiatives, manage change, coordinate cross-functional teams',
+        'Performance Monitoring': 'Track KPIs, measure progress, identify bottlenecks and success metrics',
+        'Optimization': 'Analyze results, identify improvements, implement lessons learned and best practices'
       };
     } else {
-      stages = ['Planning', 'Data Processing', 'Business Logic', 'Approval', 'Finalization'];
+      // Generic workflow for unknown types
+      stages = ['Initiation', 'Planning', 'Execution', 'Monitoring', 'Closure'];
       descriptions = {
-        'Planning': 'Analyze business requirements and create execution plan',
-        'Data Processing': 'Process business data and validate inputs',
-        'Business Logic': 'Apply business rules and compliance checks',
-        'Approval': 'Review and approve business decisions',
-        'Finalization': 'Execute approved plans and generate documentation'
+        'Initiation': 'Define project scope, identify stakeholders, establish objectives and success criteria',
+        'Planning': 'Develop detailed project plan, resource allocation, risk assessment, and timeline creation',
+        'Execution': 'Implement project activities, manage resources, coordinate team efforts and deliverables',
+        'Monitoring': 'Track progress, manage changes, control quality, and communicate status updates',
+        'Closure': 'Complete deliverables, conduct lessons learned, document outcomes and archive project data'
       };
     }
 
-    // Create nodes for each stage
-    const newNodes = stages.map((stage, index) => ({
-      id: stage.toLowerCase().replace(' ', '_'),
-      type: 'default',
-      position: { x: 250, y: index * 120 },
-      data: { 
-        label: stage,
-        description: descriptions[stage],
-        status: workflow.stage === stage.toLowerCase() ? 'current' : 
-                workflow.stage === 'finalization' && index < stages.length - 1 ? 'completed' : 'pending'
-      },
-      style: {
-        background: workflow.stage === stage.toLowerCase() ? '#17a2b8' : 
-                   workflow.stage === 'finalization' && index < stages.length - 1 ? '#28a745' : '#6c757d',
-        color: 'white',
-        border: '2px solid #333',
-        borderRadius: '8px',
-        padding: '10px',
-        width: 200,
-        textAlign: 'center'
+    // Create nodes for each stage with better positioning
+    const nodeWidth = 200;
+    const nodeHeight = 80;
+    const horizontalSpacing = 280;
+    const verticalSpacing = 140;
+    
+    const newNodes = stages.map((stage, index) => {
+      // Arrange nodes in a more compact grid layout
+      const row = Math.floor(index / 3);
+      const col = index % 3;
+      
+      // Determine node status
+      let nodeStatus = 'pending';
+      if (workflow.stage === stage.toLowerCase().replace(/\s+/g, '_')) {
+        nodeStatus = 'current';
+      } else if (workflow.stage === 'finalization' && index < stages.length - 1) {
+        nodeStatus = 'completed';
       }
-    }));
+      
+      return {
+        id: stage.toLowerCase().replace(/\s+/g, '_'),
+        type: 'custom', // Use the custom node type
+        position: { 
+          x: col * horizontalSpacing + 50, 
+          y: row * verticalSpacing + 50 
+        },
+        data: { 
+          label: stage,
+          description: descriptions[stage],
+          status: nodeStatus
+        },
+        style: {
+          width: nodeWidth,
+          height: nodeHeight,
+        },
+        // Set data attributes for CSS styling
+        data: {
+          ...stage,
+          label: stage,
+          description: descriptions[stage],
+          status: nodeStatus
+        }
+      };
+    });
 
-    // Create edges connecting stages
+    // Create edges connecting stages in logical flow
     const newEdges = [];
     for (let i = 0; i < stages.length - 1; i++) {
       newEdges.push({
         id: `e${i}`,
-        source: stages[i].toLowerCase().replace(' ', '_'),
-        target: stages[i + 1].toLowerCase().replace(' ', '_'),
+        source: stages[i].toLowerCase().replace(/\s+/g, '_'),
+        target: stages[i + 1].toLowerCase().replace(/\s+/g, '_'),
         type: 'smoothstep',
-        style: { stroke: '#333', strokeWidth: 2 },
-        animated: workflow.stage === stages[i + 1].toLowerCase()
+        style: { 
+          stroke: '#333', 
+          strokeWidth: 2,
+          strokeDasharray: workflow.stage === stages[i + 1].toLowerCase().replace(/\s+/g, '_') ? '0' : '5,5'
+        },
+        animated: workflow.stage === stages[i + 1].toLowerCase().replace(/\s+/g, '_'),
+        label: `Stage ${i + 1} → ${i + 2}`
       });
     }
 
@@ -351,6 +428,7 @@ function App() {
                           onEdgesChange={onEdgesChange}
                           onConnect={onConnect}
                           fitView
+                          nodeTypes={nodeTypes}
                         >
                           <Controls />
                           <MiniMap />

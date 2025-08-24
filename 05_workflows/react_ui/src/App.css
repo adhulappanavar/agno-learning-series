@@ -43,6 +43,134 @@
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
+/* Custom Node Styles */
+.custom-node {
+  position: relative;
+  background: white;
+  border: 2px solid #333;
+  border-radius: 8px;
+  padding: 10px;
+  min-width: 200px;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: #333;
+  transition: all 0.2s ease;
+}
+
+.custom-node:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  z-index: 10;
+}
+
+.node-content {
+  text-align: center;
+  width: 100%;
+}
+
+.node-label {
+  font-weight: 600;
+  margin-bottom: 5px;
+  line-height: 1.2;
+}
+
+/* Node Tooltip */
+.node-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  width: 300px;
+  z-index: 1000;
+  font-size: 11px;
+  line-height: 1.4;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  margin-bottom: 10px;
+}
+
+.node-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 8px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.9);
+}
+
+.node-tooltip strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: #fff;
+}
+
+.node-tooltip p {
+  margin-bottom: 8px;
+  color: #ccc;
+}
+
+.tooltip-status {
+  font-size: 10px;
+  color: #aaa;
+}
+
+.status-current {
+  color: #17a2b8;
+  font-weight: 600;
+}
+
+.status-completed {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.status-pending {
+  color: #6c757d;
+  font-weight: 600;
+}
+
+/* Node Status Colors */
+.custom-node[data-status="current"] {
+  background: #17a2b8;
+  color: white;
+  border-color: #117a8b;
+}
+
+.custom-node[data-status="completed"] {
+  background: #28a745;
+  color: white;
+  border-color: #1e7e34;
+}
+
+.custom-node[data-status="pending"] {
+  background: #6c757d;
+  color: white;
+  border-color: #545b62;
+}
+
+/* Handle Styles */
+.react-flow__handle {
+  width: 8px;
+  height: 8px;
+  background: #333;
+  border: 2px solid white;
+}
+
+.react-flow__handle:hover {
+  background: #007bff;
+  transform: scale(1.2);
+}
+
 .react-flow__controls {
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -55,6 +183,16 @@
 
 .react-flow__background {
   border-radius: 8px;
+}
+
+/* Edge Labels */
+.react-flow__edge-text {
+  font-size: 10px;
+  font-weight: 500;
+  fill: #666;
+  background: white;
+  padding: 2px 4px;
+  border-radius: 4px;
 }
 
 /* Table Styles */
