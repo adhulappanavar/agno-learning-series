@@ -366,3 +366,140 @@ pre {
     padding: 4px 8px;
   }
 }
+
+/* Execution Logs Styles */
+.execution-logs {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.logs-container {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 15px;
+  border: 1px solid #e9ecef;
+}
+
+.log-entry {
+  background: white;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-left: 4px solid #dee2e6;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+}
+
+.log-entry:hover {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  transform: translateY(-1px);
+}
+
+.log-entry.text-info {
+  border-left-color: #17a2b8;
+}
+
+.log-entry.text-success {
+  border-left-color: #28a745;
+}
+
+.log-entry.text-warning {
+  border-left-color: #ffc107;
+}
+
+.log-entry.text-danger {
+  border-left-color: #dc3545;
+}
+
+.log-entry.text-primary {
+  border-left-color: #007bff;
+}
+
+.log-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.log-timestamp {
+  color: #6c757d;
+  font-family: monospace;
+}
+
+.log-message {
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+/* Log type specific styling */
+.log-entry.text-info .log-message {
+  color: #17a2b8;
+}
+
+.log-entry.text-success .log-message {
+  color: #28a745;
+}
+
+.log-entry.text-warning .log-message {
+  color: #856404;
+}
+
+.log-entry.text-danger .log-message {
+  color: #721c24;
+}
+
+.log-entry.text-primary .log-message {
+  color: #004085;
+}
+
+/* Scrollbar styling for logs */
+.execution-logs::-webkit-scrollbar {
+  width: 8px;
+}
+
+.execution-logs::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.execution-logs::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.execution-logs::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Running workflow button states */
+.btn-warning {
+  background-color: #ffc107 !important;
+  border-color: #ffc107 !important;
+  color: #212529 !important;
+}
+
+.btn-warning:hover {
+  background-color: #e0a800 !important;
+  border-color: #d39e00 !important;
+}
+
+/* Disabled button states */
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Terminal icon styling */
+.fa-terminal {
+  color: #28a745;
+}
+
+/* Log count badge */
+.badge.bg-secondary {
+  background-color: #6c757d !important;
+  color: white !important;
+}

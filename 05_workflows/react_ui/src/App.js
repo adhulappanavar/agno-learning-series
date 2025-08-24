@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import ReactFlow, { 
   MiniMap, 
   Controls, 
@@ -9,6 +9,7 @@ import ReactFlow, {
   Handle,
   Position
 } from 'reactflow';
+import { io } from 'socket.io-client';
 import 'reactflow/dist/style.css';
 import './App.css';
 
@@ -52,10 +53,84 @@ function App() {
   const [showDiagram, setShowDiagram] = useState(false);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [socket, setSocket] = useState(null);
+  const [socketId, setSocketId] = useState(null);
+  const [executionLogs, setExecutionLogs] = useState([]);
+  const [isExecuting, setIsExecuting] = useState(false);
+  const [executingWorkflowId, setExecutingWorkflowId] = useState(null);
+  const logsEndRef = useRef(null);
 
   useEffect(() => {
     fetchWorkflows();
+    initializeSocket();
   }, []);
+
+  const initializeSocket = () => {
+    const newSocket = io('http://localhost:5002');
+    
+    newSocket.on('connect', () => {
+      console.log('Connected to WebSocket server');
+      setSocketId(newSocket.id);
+    });
+
+    newSocket.on('disconnect', () => {
+      console.log('Disconnected from WebSocket server');
+    });
+
+    newSocket.on('workflow_started', (data) => {
+      addExecutionLog(data.message, 'info', data.timestamp);
+      setIsExecuting(true);
+      setExecutingWorkflowId(data.workflow_id);
+    });
+
+    newSocket.on('workflow_output', (data) => {
+      addExecutionLog(data.message, data.type, data.timestamp);
+    });
+
+    newSocket.on('workflow_completed', (data) => {
+      addExecutionLog(data.message, 'success', data.timestamp);
+      setIsExecuting(false);
+      setExecutingWorkflowId(null);
+      // Refresh workflows to get updated status
+      setTimeout(() => fetchWorkflows(), 1000);
+    });
+
+    newSocket.on('workflow_failed', (data) => {
+      addExecutionLog(data.message, 'error', data.timestamp);
+      setIsExecuting(false);
+      setExecutingWorkflowId(null);
+    });
+
+    newSocket.on('workflow_error', (data) => {
+      addExecutionLog(data.message, 'error', data.timestamp);
+      setIsExecuting(false);
+      setExecutingWorkflowId(null);
+    });
+
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.close();
+    };
+  };
+
+  const addExecutionLog = (message, type, timestamp) => {
+    const newLog = {
+      id: Date.now(),
+      message,
+      type,
+      timestamp: timestamp || new Date().toISOString()
+    };
+    setExecutionLogs(prev => [...prev, newLog]);
+  };
+
+  const scrollToBottom = () => {
+    logsEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [executionLogs]);
 
   const fetchWorkflows = async () => {
     try {
@@ -119,6 +194,7 @@ function App() {
   const selectWorkflow = (workflow) => {
     setSelectedWorkflow(workflow);
     setShowDiagram(false);
+    setExecutionLogs([]); // Clear previous logs
     generateWorkflowDiagram(workflow);
   };
 
@@ -240,22 +316,37 @@ function App() {
   };
 
   const runWorkflow = async (workflowId) => {
+    if (!socket || !socketId) {
+      alert('WebSocket connection not available. Please refresh the page.');
+      return;
+    }
+
     try {
-      // Simulate workflow execution
-      setSelectedWorkflow(prev => ({ ...prev, status: 'running' }));
+      setIsExecuting(true);
+      setExecutingWorkflowId(workflowId);
+      setExecutionLogs([]); // Clear previous logs
       
-      // Update workflow status in the backend (you can implement this)
-      console.log(`Starting workflow: ${workflowId}`);
-      
-      // Simulate progress
-      setTimeout(() => {
-        setSelectedWorkflow(prev => ({ ...prev, status: 'completed' }));
-        alert(`Workflow ${workflowId} execution completed!`);
-      }, 3000);
+      // Call the backend API to start workflow execution
+      const response = await fetch(`/api/workflows/${workflowId}/run`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ socket_id: socketId }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      addExecutionLog(`🚀 Workflow execution started: ${data.message}`, 'info');
       
     } catch (error) {
       console.error('Error running workflow:', error);
-      alert('Error running workflow. Please try again.');
+      addExecutionLog(`❌ Error starting workflow: ${error.message}`, 'error');
+      setIsExecuting(false);
+      setExecutingWorkflowId(null);
     }
   };
 
@@ -263,6 +354,44 @@ function App() {
     (params) => setEdges((eds) => addEdge(params, eds)),
     [setEdges],
   );
+
+  const clearLogs = () => {
+    setExecutionLogs([]);
+  };
+
+  const getLogTypeClass = (type) => {
+    switch (type) {
+      case 'error':
+        return 'text-danger';
+      case 'success':
+        return 'text-success';
+      case 'warning':
+        return 'text-warning';
+      case 'info':
+        return 'text-info';
+      case 'command':
+        return 'text-primary';
+      default:
+        return 'text-muted';
+    }
+  };
+
+  const getLogIcon = (type) => {
+    switch (type) {
+      case 'error':
+        return 'fas fa-exclamation-circle';
+      case 'success':
+        return 'fas fa-check-circle';
+      case 'warning':
+        return 'fas fa-exclamation-triangle';
+      case 'info':
+        return 'fas fa-info-circle';
+      case 'command':
+        return 'fas fa-terminal';
+      default:
+        return 'fas fa-chevron-right';
+    }
+  };
 
   if (loading) {
     return (
@@ -350,14 +479,19 @@ function App() {
                           Diagram
                         </button>
                         <button 
-                          className="btn btn-sm btn-outline-success"
+                          className={`btn btn-sm ${isExecuting && executingWorkflowId === workflow.id ? 'btn-warning' : 'btn-outline-success'}`}
                           onClick={(e) => {
                             e.stopPropagation();
-                            runWorkflow(workflow.id);
+                            if (isExecuting && executingWorkflowId === workflow.id) {
+                              addExecutionLog('⚠️ Workflow is already running', 'warning');
+                            } else {
+                              runWorkflow(workflow.id);
+                            }
                           }}
+                          disabled={isExecuting && executingWorkflowId !== workflow.id}
                         >
-                          <i className="fas fa-play me-1"></i>
-                          Run
+                          <i className={`fas ${isExecuting && executingWorkflowId === workflow.id ? 'fa-pause' : 'fa-play'} me-1`}></i>
+                          {isExecuting && executingWorkflowId === workflow.id ? 'Running' : 'Run'}
                         </button>
                       </div>
                     </div>
@@ -382,11 +516,18 @@ function App() {
                       {showDiagram ? 'Hide' : 'Show'} Diagram
                     </button>
                     <button 
-                      className="btn btn-success"
-                      onClick={() => runWorkflow(selectedWorkflow.id)}
+                      className={`btn ${isExecuting && executingWorkflowId === selectedWorkflow.id ? 'btn-warning' : 'btn-success'}`}
+                      onClick={() => {
+                        if (isExecuting && executingWorkflowId === selectedWorkflow.id) {
+                          addExecutionLog('⚠️ Workflow is already running', 'warning');
+                        } else {
+                          runWorkflow(selectedWorkflow.id);
+                        }
+                      }}
+                      disabled={isExecuting && executingWorkflowId !== selectedWorkflow.id}
                     >
-                      <i className="fas fa-play me-1"></i>
-                      Run Workflow
+                      <i className={`fas ${isExecuting && executingWorkflowId === selectedWorkflow.id ? 'fa-pause' : 'fa-play'} me-1`}></i>
+                      {isExecuting && executingWorkflowId === selectedWorkflow.id ? 'Running...' : 'Run Workflow'}
                     </button>
                   </div>
                 </div>
@@ -482,6 +623,57 @@ function App() {
                           {JSON.stringify(JSON.parse(selectedWorkflow.stage_data || '{}'), null, 2)}
                         </pre>
                       </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Execution Logs */}
+                <div className="card mb-4">
+                  <div className="card-body">
+                    <div className="d-flex justify-content-between align-items-center mb-3">
+                      <h5 className="card-title mb-0">
+                        <i className="fas fa-terminal me-2"></i>
+                        Execution Logs
+                      </h5>
+                      <div>
+                        <button 
+                          className="btn btn-outline-secondary btn-sm me-2"
+                          onClick={clearLogs}
+                          disabled={executionLogs.length === 0}
+                        >
+                          <i className="fas fa-trash me-1"></i>
+                          Clear
+                        </button>
+                        <span className="badge bg-secondary">
+                          {executionLogs.length} logs
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div className="execution-logs">
+                      {executionLogs.length === 0 ? (
+                        <div className="text-center text-muted py-4">
+                          <i className="fas fa-terminal fa-2x mb-2"></i>
+                          <p>No execution logs yet. Run a workflow to see real-time output.</p>
+                        </div>
+                      ) : (
+                        <div className="logs-container">
+                          {executionLogs.map((log) => (
+                            <div key={log.id} className={`log-entry ${getLogTypeClass(log.type)}`}>
+                              <div className="log-header">
+                                <i className={`${getLogIcon(log.type)} me-2`}></i>
+                                <span className="log-timestamp">
+                                  {formatDate(log.timestamp)}
+                                </span>
+                              </div>
+                              <div className="log-message">
+                                {log.message}
+                              </div>
+                            </div>
+                          ))}
+                          <div ref={logsEndRef} />
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
