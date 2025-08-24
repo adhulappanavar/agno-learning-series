@@ -24,7 +24,7 @@ def get_workflows():
         
         # Get all workflows
         cursor.execute("""
-            SELECT id, stage, status, created_at, updated_at, stage_data
+            SELECT workflow_id, current_stage, status, created_at, updated_at, stage_data
             FROM workflow_states
             ORDER BY created_at DESC
         """)
