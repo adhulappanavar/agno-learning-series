@@ -122,12 +122,6 @@ let currentWorkflowId = null;
 let workflowStages = [];
 let executionInterval = null;
 
-// Initialize workflow page
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🔄 Phase 2: Interactive Workflow Visualization initialized');
-    loadWorkflows();
-});
-
 // Load available workflows
 function loadWorkflows() {
     fetch('/api/workflows')
@@ -203,21 +197,41 @@ function selectWorkflow(workflowId) {
 
 // Load workflow stages for visualization
 function loadWorkflowStages(workflowId) {
+    console.log('🔗 Diagram button clicked for workflow:', workflowId);
+    
     if (!socket) {
+        console.error('❌ Socket not available for loadWorkflowStages');
         showNotification('WebSocket not connected', 'warning');
         return;
     }
     
+    if (!socket.connected) {
+        console.error('❌ Socket not connected for loadWorkflowStages');
+        showNotification('WebSocket connection lost', 'warning');
+        return;
+    }
+    
+    console.log('📡 Emitting get_workflow_stages event for workflow:', workflowId);
     socket.emit('get_workflow_stages', { workflow_id: workflowId });
 }
 
 // View workflow details
 function viewWorkflowDetails(workflowId) {
+    console.log('👁️ View button clicked for workflow:', workflowId);
+    
     if (!socket) {
+        console.error('❌ Socket not available for viewWorkflowDetails');
         showNotification('WebSocket not connected', 'warning');
         return;
     }
     
+    if (!socket.connected) {
+        console.error('❌ Socket not connected for viewWorkflowDetails');
+        showNotification('WebSocket connection lost', 'warning');
+        return;
+    }
+    
+    console.log('📡 Emitting get_workflow_details event for workflow:', workflowId);
     socket.emit('get_workflow_details', { workflow_id: workflowId });
 }
 
@@ -318,29 +332,79 @@ function getStatusBadge(status) {
 }
 
 // WebSocket event handlers for Phase 2
-if (typeof socket !== 'undefined') {
-    socket.on('workflow_stages', function(data) {
-        displayWorkflowStages(data);
-        document.getElementById('workflow-diagram-container').style.display = 'block';
-    });
-    
-    socket.on('workflow_details', function(data) {
-        displayWorkflowDetails(data);
-        document.getElementById('workflow-details-container').style.display = 'block';
-    });
-    
-    socket.on('execution_update', function(data) {
-        showNotification(`Execution ${data.action}: ${data.message}`, 'info');
-    });
-    
-    socket.on('workflow_progress', function(data) {
-        updateExecutionProgress(data);
-    });
-    
-    socket.on('error', function(data) {
-        showNotification(`Error: ${data.message}`, 'danger');
-    });
+function setupWebSocketHandlers() {
+    if (typeof socket !== 'undefined' && socket) {
+        console.log('🔌 Setting up WebSocket handlers for workflow events');
+        
+        socket.on('workflow_stages', function(data) {
+            console.log('📊 Received workflow stages:', data);
+            displayWorkflowStages(data);
+            document.getElementById('workflow-diagram-container').style.display = 'block';
+        });
+        
+        socket.on('workflow_details', function(data) {
+            console.log('📋 Received workflow details:', data);
+            displayWorkflowDetails(data);
+            document.getElementById('workflow-details-container').style.display = 'block';
+        });
+        
+        socket.on('execution_update', function(data) {
+            console.log('⚡ Execution update:', data);
+            showNotification(`Execution ${data.action}: ${data.message}`, 'info');
+        });
+        
+        socket.on('workflow_progress', function(data) {
+            console.log('📈 Workflow progress:', data);
+            updateExecutionProgress(data);
+        });
+        
+        socket.on('error', function(data) {
+            console.error('❌ WebSocket error:', data);
+            showNotification(`Error: ${data.message}`, 'danger');
+        });
+        
+        socket.on('connect', function() {
+            console.log('✅ WebSocket connected for workflow page');
+        });
+        
+        socket.on('disconnect', function() {
+            console.log('❌ WebSocket disconnected from workflow page');
+        });
+        
+        return true;
+    } else {
+        console.warn('⚠️ Socket not available, retrying in 1 second...');
+        return false;
+    }
 }
+
+// Initialize workflow page
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🔄 Phase 2: Interactive Workflow Visualization initialized');
+    
+    // Try to set up WebSocket handlers
+    let handlersSetup = false;
+    let retryCount = 0;
+    const maxRetries = 10;
+    
+    function trySetupHandlers() {
+        if (setupWebSocketHandlers()) {
+            handlersSetup = true;
+            console.log('✅ WebSocket handlers setup successful');
+            loadWorkflows();
+        } else if (retryCount < maxRetries) {
+            retryCount++;
+            console.log(`🔄 Retry ${retryCount}/${maxRetries} for WebSocket setup`);
+            setTimeout(trySetupHandlers, 1000);
+        } else {
+            console.error('❌ Failed to setup WebSocket handlers after maximum retries');
+            // Fallback: load workflows anyway
+            loadWorkflows();
+        }
+    }
+    
+    trySetupHandlers();
+});
 
 // Display workflow stages diagram
 function displayWorkflowStages(data) {
