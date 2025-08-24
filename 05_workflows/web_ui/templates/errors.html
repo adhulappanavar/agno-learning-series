@@ -1,0 +1,326 @@
+{% extends "base.html" %}
+
+{% block title %}Errors - Workflow Visualization{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Page Header -->
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1><i class="fas fa-exclamation-triangle me-2"></i>Error Handling Dashboard</h1>
+            <div>
+                <button class="btn btn-outline-primary me-2" onclick="refreshErrors()">
+                    <i class="fas fa-sync-alt me-1"></i>Refresh
+                </button>
+                <button class="btn btn-primary" onclick="showErrorsInfo()">
+                    <i class="fas fa-info-circle me-1"></i>Info
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Phase 1 Placeholder -->
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-tools me-1"></i>Phase 1: Foundation Complete
+                </h6>
+            </div>
+            <div class="card-body text-center py-5">
+                <i class="fas fa-exclamation-triangle fa-4x text-warning mb-4"></i>
+                <h3 class="text-warning mb-3">Error Handling & Recovery</h3>
+                <p class="text-muted mb-4">
+                    This page will contain comprehensive error monitoring, recovery options, 
+                    and error trend analysis in Phase 4.
+                </p>
+                
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <div class="card border-left-danger">
+                            <div class="card-body">
+                                <i class="fas fa-bug fa-2x text-danger mb-2"></i>
+                                <h6>Error Detection</h6>
+                                <small class="text-muted">Coming in Phase 4</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card border-left-warning">
+                            <div class="card-body">
+                                <i class="fas fa-tools fa-2x text-warning mb-2"></i>
+                                <h6>Recovery Tools</h6>
+                                <small class="text-muted">Coming in Phase 4</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card border-left-info">
+                            <div class="card-body">
+                                <i class="fas fa-chart-line fa-2x text-info mb-2"></i>
+                                <h6>Error Trends</h6>
+                                <small class="text-muted">Coming in Phase 4</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card border-left-success">
+                            <div class="card-body">
+                                <i class="fas fa-bell fa-2x text-success mb-2"></i>
+                                <h6>Alert System</h6>
+                                <small class="text-muted">Coming in Phase 4</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <a href="/" class="btn btn-primary me-2">
+                        <i class="fas fa-tachometer-alt me-1"></i>Back to Dashboard
+                    </a>
+                    <button class="btn btn-outline-warning" onclick="showPhase4Preview()">
+                        <i class="fas fa-eye me-1"></i>Phase 4 Preview
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Error Handling Overview -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-list me-1"></i>Error Handling Features
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h6 class="card-title text-danger">
+                                    <i class="fas fa-exclamation-circle me-2"></i>Error Detection
+                                </h6>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-clock text-warning me-2"></i>Real-time error monitoring (Phase 4)</li>
+                                    <li><i class="fas fa-clock text-warning me-2"></i>Error classification (Phase 4)</li>
+                                    <li><i class="fas fa-clock text-warning me-2"></i>Severity assessment (Phase 4)</li>
+                                    <li><i class="fas fa-clock text-warning me-2"></i>Pattern recognition (Phase 4)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h6 class="card-title text-warning">
+                                    <i class="fas fa-tools me-2"></i>Recovery Options
+                                </h6>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-clock text-warning me-2"></i>Automatic retry (Phase 4)</li>
+                                    <li><i class="fas fa-clock text-warning me-2"></i>Manual intervention (Phase 4)</li>
+                                    <li><i class="fas fa-clock text-warning me-2"></i>Rollback capabilities (Phase 4)</li>
+                                    <li><i class="fas fa-clock text-warning me-2"></i>Alternative paths (Phase 4)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mt-3">
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h6 class="card-title text-info">
+                                    <i class="fas fa-chart-line me-2"></i>Error Analysis
+                                </h6>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-clock text-warning me-2"></i>Error frequency trends (Phase 4)</li>
+                                    <li><i class="fas fa-clock text-warning me-2"></i>Root cause analysis (Phase 4)</li>
+                                    <li><i class="fas fa-clock text-warning me-2"></i>Impact assessment (Phase 4)</li>
+                                    <li><i class="fas fa-clock text-warning me-2"></i>Predictive alerts (Phase 4)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h6 class="card-title text-success">
+                                    <i class="fas fa-shield-alt me-2"></i>Prevention
+                                </h6>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-clock text-warning me-2"></i>Proactive monitoring (Phase 4)</li>
+                                    <li><i class="fas fa-clock text-warning me-2"></i>Threshold alerts (Phase 4)</li>
+                                    <li><i class="fas fa-clock text-warning me-2"></i>Best practices (Phase 4)</li>
+                                    <li><i class="fas fa-clock text-warning me-2"></i>Learning system (Phase 4)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Current Error Status -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-info-circle me-1"></i>Current Status
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Phase 1 Status:</strong> Basic error handling infrastructure is in place. 
+                    The workflow system includes built-in error handling at each stage, but the 
+                    comprehensive error monitoring and visualization dashboard will be implemented in Phase 4.
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <div class="border rounded p-3">
+                            <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                            <h6>Basic Error Handling</h6>
+                            <small class="text-muted">Implemented in workflows</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="border rounded p-3">
+                            <i class="fas fa-clock fa-2x text-warning mb-2"></i>
+                            <h6>Error Monitoring</h6>
+                            <small class="text-muted">Coming in Phase 4</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="border rounded p-3">
+                            <i class="fas fa-clock fa-2x text-warning mb-2"></i>
+                            <h6>Recovery Tools</h6>
+                            <small class="text-muted">Coming in Phase 4</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Initialize errors page
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Errors page loaded');
+});
+
+// Refresh errors
+function refreshErrors() {
+    console.log('Refreshing errors...');
+    // This will be implemented in Phase 4
+    alert('Error refresh functionality will be implemented in Phase 4.');
+}
+
+// Show errors information
+function showErrorsInfo() {
+    const info = `
+Phase 1: Foundation Complete ✅
+
+What's implemented:
+• Basic Flask web application
+• Navigation and routing
+• Dashboard with statistics
+• Database integration
+• WebSocket support
+
+What's coming in Phase 2:
+• Interactive workflow diagrams
+• Real-time stage monitoring
+• Workflow execution controls
+• Detailed stage information
+• Visual workflow designer
+
+What's coming in Phase 3:
+• Performance metrics dashboard
+• Execution time charts
+• Success rate analysis
+• Resource utilization monitoring
+• Historical data trends
+• Custom reporting tools
+• Export capabilities
+
+What's coming in Phase 4:
+• Comprehensive error monitoring
+• Real-time error detection
+• Recovery option visualization
+• Error trend analysis
+• Alert system
+• Prevention strategies
+• Learning capabilities
+    `;
+    alert(info);
+}
+
+// Show Phase 4 preview
+function showPhase4Preview() {
+    const preview = `
+🚨 Phase 4 Preview: Error Handling & Recovery Dashboard
+
+Features that will be implemented:
+
+1. Error Detection & Monitoring
+   • Real-time error monitoring
+   • Automatic error classification
+   • Severity assessment
+   • Pattern recognition
+   • Instant notifications
+
+2. Recovery Options
+   • Automatic retry mechanisms
+   • Manual intervention tools
+   • Rollback capabilities
+   • Alternative execution paths
+   • Recovery success tracking
+
+3. Error Analysis & Trends
+   • Error frequency analysis
+   • Root cause identification
+   • Impact assessment
+   • Historical error patterns
+   • Predictive error alerts
+
+4. Prevention & Learning
+   • Proactive monitoring
+   • Threshold-based alerts
+   • Best practice recommendations
+   • Learning from past errors
+   • Continuous improvement
+
+5. Alert System
+   • Configurable alert levels
+   • Multiple notification channels
+   • Escalation procedures
+   • Alert history tracking
+   • Custom alert rules
+
+6. Recovery Workflows
+   • Automated recovery procedures
+   • Manual recovery guides
+   • Recovery time tracking
+   • Success rate monitoring
+   • Optimization suggestions
+
+This will provide comprehensive error handling, monitoring, and recovery capabilities!
+    `;
+    alert(preview);
+}
+</script>
+{% endblock %}
