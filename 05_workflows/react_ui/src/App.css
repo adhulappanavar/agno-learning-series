@@ -280,6 +280,58 @@ code {
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+/* Workflow Description Styles */
+.workflow-description {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 8px;
+  padding: 20px;
+  border-left: 4px solid #007bff;
+}
+
+.workflow-description h5 {
+  color: #007bff;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.description-content p {
+  color: #495057;
+  line-height: 1.6;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.description-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.description-features .badge {
+  font-size: 11px;
+  padding: 6px 10px;
+  border-radius: 15px;
+  font-weight: 500;
+  border: 1px solid #dee2e6;
+  background: white;
+  color: #495057;
+  transition: all 0.2s ease;
+}
+
+.description-features .badge:hover {
+  background: #007bff;
+  color: white;
+  border-color: #007bff;
+  transform: translateY(-1px);
+}
+
+/* Info Icon Styling */
+.workflow-description .fa-info-circle {
+  color: #007bff;
+  font-size: 18px;
+}
+
 pre {
   font-size: 0.8rem;
   max-height: 200px;
@@ -298,5 +350,19 @@ pre {
   
   .react-flow__node {
     font-size: 0.8rem;
+  }
+
+  /* Responsive adjustments for description */
+  .workflow-description {
+    padding: 15px;
+  }
+  
+  .description-features {
+    gap: 6px;
+  }
+  
+  .description-features .badge {
+    font-size: 10px;
+    padding: 4px 8px;
   }
 }

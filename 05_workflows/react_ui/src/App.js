@@ -394,6 +394,77 @@ function App() {
                 {/* Workflow Info */}
                 <div className="card mb-4">
                   <div className="card-body">
+                    {/* Workflow Description */}
+                    <div className="workflow-description mb-4">
+                      <h5 className="text-primary mb-3">
+                        <i className="fas fa-info-circle me-2"></i>
+                        What This Workflow Does
+                      </h5>
+                      {selectedWorkflow.id.includes('financial') ? (
+                        <div className="description-content">
+                          <p className="mb-2">
+                            <strong>Financial Planning & Analysis Workflow</strong> - This workflow manages the complete lifecycle of financial planning projects, 
+                            from initial requirements gathering through final audit and reporting. It handles budget planning, risk assessment, 
+                            compliance verification, and financial execution while ensuring regulatory requirements are met.
+                          </p>
+                          <div className="description-features">
+                            <span className="badge bg-light text-dark me-2">Budget Management</span>
+                            <span className="badge bg-light text-dark me-2">Risk Assessment</span>
+                            <span className="badge bg-light text-dark me-2">Compliance</span>
+                            <span className="badge bg-light text-dark me-2">Financial Modeling</span>
+                            <span className="badge bg-light text-dark me-2">Audit & Reporting</span>
+                          </div>
+                        </div>
+                      ) : selectedWorkflow.id.includes('data') ? (
+                        <div className="description-content">
+                          <p className="mb-2">
+                            <strong>Data Processing & Analytics Workflow</strong> - This workflow orchestrates end-to-end data operations including 
+                            data discovery, validation, transformation, and deployment. It ensures data quality, implements ETL processes, 
+                            and maintains data governance standards for analytics and reporting systems.
+                          </p>
+                          <div className="description-features">
+                            <span className="badge bg-light text-dark me-2">ETL Processing</span>
+                            <span className="badge bg-light text-dark me-2">Data Quality</span>
+                            <span className="badge bg-light text-dark me-2">Validation</span>
+                            <span className="badge bg-light text-dark me-2">Transformation</span>
+                            <span className="badge bg-light text-dark me-2">Governance</span>
+                          </div>
+                        </div>
+                      ) : selectedWorkflow.id.includes('business') ? (
+                        <div className="description-content">
+                          <p className="mb-2">
+                            <strong>Business Strategy & Operations Workflow</strong> - This workflow manages strategic business initiatives from 
+                            market research through implementation and optimization. It coordinates stakeholder alignment, resource planning, 
+                            and performance monitoring to ensure successful business outcomes and continuous improvement.
+                          </p>
+                          <div className="description-features">
+                            <span className="badge bg-light text-dark me-2">Strategy</span>
+                            <span className="badge bg-light text-dark me-2">Planning</span>
+                            <span className="badge bg-light text-dark me-2">Implementation</span>
+                            <span className="badge bg-light text-dark me-2">Monitoring</span>
+                            <span className="badge bg-light text-dark me-2">Optimization</span>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="description-content">
+                          <p className="mb-2">
+                            <strong>General Project Management Workflow</strong> - This workflow provides a standardized approach to project 
+                            management with defined stages for initiation, planning, execution, monitoring, and closure. It ensures 
+                            consistent project delivery and proper documentation throughout the project lifecycle.
+                          </p>
+                          <div className="description-features">
+                            <span className="badge bg-light text-dark me-2">Project Planning</span>
+                            <span className="badge bg-light text-dark me-2">Execution</span>
+                            <span className="badge bg-light text-dark me-2">Monitoring</span>
+                            <span className="badge bg-light text-dark me-2">Documentation</span>
+                            <span className="badge bg-light text-dark me-2">Closure</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    
+                    <hr className="my-4" />
+                    
                     <div className="row">
                       <div className="col-md-6">
                         <p><strong>Status:</strong> 
