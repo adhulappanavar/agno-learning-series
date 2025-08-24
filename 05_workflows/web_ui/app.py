@@ -209,16 +209,56 @@ def handle_workflow_details(data):
         
         row = cursor.fetchone()
         if row:
+            # Parse the stage data to extract meaningful information
+            stage_data = row['stage_data']
+            completed_stages = row['completed_stages'] or '[]'
+            failed_stages = row['failed_stages'] or '[]'
+            
+            # Parse completed and failed stages
+            try:
+                completed = eval(completed_stages) if completed_stages else []
+                failed = eval(failed_stages) if failed_stages else []
+            except:
+                completed = []
+                failed = []
+            
+            # Extract stage information from stage_data
+            stage_info = {}
+            if stage_data:
+                try:
+                    # Parse the JSON stage data
+                    import json
+                    parsed_data = json.loads(stage_data)
+                    stage_info = {
+                        'summary': parsed_data.get('workflow_summary', 'No summary available'),
+                        'total_stages': parsed_data.get('total_stages', 0),
+                        'completion_timestamp': parsed_data.get('completion_timestamp', 'Unknown'),
+                        'performance_metrics': parsed_data.get('performance_metrics', {})
+                    }
+                except:
+                    stage_info = {'raw_data': stage_data}
+            
+            # Calculate success rate safely
+            total_stages = len(completed) + len(failed)
+            if total_stages > 0:
+                success_rate = f"{(len(completed) / total_stages) * 100:.1f}%"
+            else:
+                success_rate = "0%"
+            
             workflow_details = {
                 'id': row['workflow_id'],
                 'current_stage': row['current_stage'],
-                'stage_data': row['stage_data'],
-                'completed_stages': row['completed_stages'],
-                'failed_stages': row['failed_stages'],
+                'stage_data': stage_data,
+                'completed_stages': completed,
+                'failed_stages': failed,
                 'workflow_data': row['workflow_data'],
                 'created_at': row['created_at'],
                 'updated_at': row['updated_at'],
-                'status': row['status']
+                'status': row['status'],
+                'stage_info': stage_info,
+                'total_completed': len(completed),
+                'total_failed': len(failed),
+                'success_rate': success_rate
             }
             emit('workflow_details', workflow_details)
         else:

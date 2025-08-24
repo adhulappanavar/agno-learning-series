@@ -401,22 +401,62 @@ function displayWorkflowStages(data) {
 function displayWorkflowDetails(data) {
     const container = document.getElementById('workflow-details');
     
+    // Format the stage data for better display
+    let stageDataDisplay = 'No stage data available';
+    if (data.stage_data) {
+        try {
+            const parsed = JSON.parse(data.stage_data);
+            stageDataDisplay = JSON.stringify(parsed, null, 2);
+        } catch {
+            stageDataDisplay = data.stage_data;
+        }
+    }
+    
+    // Format stage info for display
+    let stageInfoDisplay = '';
+    if (data.stage_info && data.stage_info.summary) {
+        stageInfoDisplay = `
+            <div class="alert alert-info">
+                <h6><i class="fas fa-info-circle me-2"></i>Workflow Summary</h6>
+                <p class="mb-2">${data.stage_info.summary}</p>
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Total Stages:</strong> ${data.stage_info.total_stages}
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Completion:</strong> ${data.stage_info.completion_timestamp}
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Success Rate:</strong> ${data.success_rate}
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Status:</strong> ${getStatusBadge(data.status)}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+    
     container.innerHTML = `
+        ${stageInfoDisplay}
         <div class="row">
             <div class="col-md-6">
-                <h6>Workflow Information</h6>
+                <h6><i class="fas fa-cogs me-2"></i>Workflow Information</h6>
                 <table class="table table-sm">
                     <tr><td><strong>ID:</strong></td><td><code>${data.id}</code></td></tr>
                     <tr><td><strong>Status:</strong></td><td>${getStatusBadge(data.status)}</td></tr>
                     <tr><td><strong>Current Stage:</strong></td><td>${data.current_stage || 'None'}</td></tr>
+                    <tr><td><strong>Completed Stages:</strong></td><td>${data.total_completed}</td></tr>
+                    <tr><td><strong>Failed Stages:</strong></td><td>${data.total_failed}</td></tr>
+                    <tr><td><strong>Success Rate:</strong></td><td>${data.success_rate}</td></tr>
                     <tr><td><strong>Created:</strong></td><td>${data.created_at || 'Unknown'}</td></tr>
                     <tr><td><strong>Updated:</strong></td><td>${data.updated_at || 'Unknown'}</td></tr>
                 </table>
             </div>
             <div class="col-md-6">
-                <h6>Stage Data</h6>
+                <h6><i class="fas fa-database me-2"></i>Stage Data</h6>
                 <div class="stage-data-container">
-                    <pre class="bg-light p-2 rounded"><code>${data.stage_data || 'No stage data available'}</code></pre>
+                    <pre class="bg-light p-2 rounded"><code>${stageDataDisplay}</code></pre>
                 </div>
             </div>
         </div>
