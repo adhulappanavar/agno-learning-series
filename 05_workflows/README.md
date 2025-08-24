@@ -1,457 +1,204 @@
-# Example 5: Workflows (Level 5)
+# Example 5: Workflows (Level 5) - Complex agentic workflows with state management
 
-This is the fifth and final example in the Agno learning series. We'll build a **Level 5** system with complex agentic workflows, state management, and advanced orchestration capabilities.
+This example demonstrates **Level 5** of the Agno framework: **Agentic Workflows** - complex multi-step workflows with state management, persistence, and error handling.
 
-## What You'll Learn
+## 🎯 What You'll Learn
 
-- How to create multi-stage workflows with state management
-- How to implement workflow persistence and recovery
-- How to handle errors and provide recovery mechanisms
-- How to run multiple workflows concurrently
-- How to customize workflows for different domains
-- How to monitor workflow performance and metrics
-- How to implement conditional branching and decision making
+- **Workflow Orchestration**: Create complex multi-step workflows
+- **State Management**: Persist workflow state across sessions
+- **Error Handling**: Graceful failure and recovery
+- **Agent Coordination**: Multiple agents working together in sequence
+- **Real-time Monitoring**: Track workflow progress and status
 
-## What We're Building
+## 🚀 Features
 
-A sophisticated workflow orchestration system that can:
+### **Core Workflow System**
+- **Custom Workflow State**: Persistent state management using SQLite
+- **Multi-stage Execution**: Business logic → Approval → Finalization
+- **Error Recovery**: Automatic retry and fallback mechanisms
+- **Progress Tracking**: Real-time status updates and monitoring
 
-- **Orchestrate Complex Processes**: Multi-stage workflows with dependencies
-- **Manage State Persistence**: Save and restore workflow states across sessions
-- **Handle Errors Gracefully**: Provide recovery options and error handling
-- **Execute Concurrently**: Run multiple workflows simultaneously
-- **Track Performance**: Monitor metrics and performance indicators
-- **Customize for Domains**: Adapt workflows for different business needs
+### **Agent Capabilities**
+- **Business Logic Agent**: Analyzes business requirements and creates plans
+- **Approval Agent**: Reviews and approves business decisions
+- **Finalization Agent**: Executes approved plans and generates reports
 
-## Key Differences from Previous Examples
+### **State Persistence**
+- **SQLite Database**: `workflow_states.db` stores all workflow data
+- **Session Recovery**: Workflows can be resumed after interruptions
+- **Audit Trail**: Complete history of workflow execution
 
-- **Level 1**: Basic tools and instructions
-- **Level 2**: Knowledge storage and retrieval
-- **Level 3**: Memory, reasoning, and session persistence
-- **Level 4**: Multi-agent collaboration and team coordination
-- **Level 5**: **Complex agentic workflows with state management**
-- **New Features**: Workflow orchestration, state persistence, error recovery, concurrent execution
-
-## Files
-
-- `workflows.py` - The main workflows code with complex workflow orchestration
-- `workflow_test.py` - Comprehensive testing suite for workflow capabilities
-- `requirements.txt` - Dependencies
-- `setup.md` - Setup and usage guide
-
-## Example Output
-
-When you run `python workflows.py`, you'll see:
+## 📁 Project Structure
 
 ```
-🚀 Complex Workflows (Level 5) Demonstration
-============================================================
-This example shows advanced workflow orchestration with state management.
-
-💰 Example 1: Financial Approval Workflow
-----------------------------------------
-🔄 Resuming existing workflow: financial_001
-🚀 Starting Complex Workflow: financial_001
-============================================================
-
-🔄 [2025-08-24 10:40:37] PLANNING: Starting workflow analysis and planning
-
-🔄 [2025-08-24 10:41:01] PLANNING: Planning completed successfully
-📊 Stage Data: {
-  "plan": "Here's the detailed execution plan for the given financial workflow...",
-  "input_analysis": {...},
-  "planning_timestamp": "2025-08-24T10:41:01.801420"
-}
-
-🔄 [2025-08-24 10:41:01] DATA_PROCESSING: Starting data processing and validation
-
-🔄 [2025-08-24 10:41:23] DATA_PROCESSING: Data processing completed successfully
-📊 Stage Data: {
-  "pipeline_design": "Here's a detailed data processing workflow...",
-  "validation_rules": ["data_format", "data_range", "data_completeness"],
-  "processing_timestamp": "2025-08-24T10:41:23.797208",
-  "records_processed": 3
-}
-
-🔄 [2025-08-24 10:41:23] BUSINESS_LOGIC: Starting business logic execution
-
-🔄 [2025-08-24 10:41:23] BUSINESS_LOGIC: Business logic executed successfully
-📊 Stage Data: {
-  "business_logic": {
-    "type": "financial",
-    "rules": ["amount_validation", "budget_check", "approval_threshold"],
-    "calculations": ["total_amount", "tax_calculation", "final_amount"],
-    "compliance": ["SOX", "GAAP", "Internal Controls"]
-  },
-  "workflow_type": "financial",
-  "execution_timestamp": "2025-08-24T10:41:23.802107",
-  "business_rules_applied": 3
-}
-
-🔄 [2025-08-24 10:41:50] APPROVAL: Starting approval and decision making
-
-🔄 [2025-08-24 10:41:50] APPROVAL: Approval completed successfully
-📊 Stage Data: {
-  "approval_design": "Here is a comprehensive approval workflow...",
-  "approval_levels": ["Level 1", "Level 2", "Level 3"],
-  "approval_timestamp": "2025-08-24T10:41:50.005922",
-  "approval_status": "approved"
-}
-
-🔄 [2025-08-24 10:41:50] FINALIZATION: Starting finalization and reporting
-
-🔄 [2025-08-24 10:41:50] FINALIZATION: Finalization completed successfully
-📊 Stage Data: {
-  "workflow_summary": "Workflow financial_001 completed successfully",
-  "total_stages": 10,
-  "completion_timestamp": "2025-08-24T10:41:50.009412",
-  "performance_metrics": {
-    "total_duration": "5 minutes",
-    "stages_completed": 10,
-    "success_rate": "100%"
-  }
-}
-
-🎉 Workflow completed successfully!
-============================================================
-
-📊 Financial Workflow Result: completed
-
-📊 Example 2: Data Processing Workflow
-----------------------------------------
-🔄 Resuming existing workflow: data_001
-🚀 Starting Complex Workflow: data_001
-============================================================
-
-🔄 [2025-08-24 10:41:50] PLANNING: Starting workflow analysis and planning
-
-🔄 [2025-08-24 10:42:15] PLANNING: Planning completed successfully
-📊 Stage Data: {
-  "plan": "# Workflow Execution Plan for Data Processing...",
-  "input_analysis": {...},
-  "planning_timestamp": "2025-08-24T10:42:15.806857"
-}
-
-🔄 [2025-08-24 10:42:15] DATA_PROCESSING: Starting data processing and validation
-
-🔄 [2025-08-24 10:42:38] DATA_PROCESSING: Data processing completed successfully
-📊 Stage Data: {
-  "pipeline_design": "# Data Processing Workflow Design...",
-  "validation_rules": ["data_format", "data_range", "data_completeness"],
-  "processing_timestamp": "2025-08-24T10:42:38.947667",
-  "records_processed": 3
-}
-
-🔄 [2025-08-24 10:42:38] BUSINESS_LOGIC: Starting business logic execution
-
-🔄 [2025-08-24 10:42:38] BUSINESS_LOGIC: Business logic executed successfully
-📊 Stage Data: {
-  "business_logic": {
-    "type": "standard",
-    "rules": ["business_validation", "data_integrity", "process_compliance"],
-    "workflow": ["input_validation", "processing", "output_generation"],
-    "quality": ["error_handling", "logging", "monitoring"]
-  },
-  "workflow_type": "data_processing",
-  "execution_timestamp": "2025-08-24T10:42:38.951310",
-  "business_rules_applied": 3
-}
-
-🔄 [2025-08-24 10:42:38] APPROVAL: Starting approval and decision making
-
-🔄 [2025-08-24 10:43:09] APPROVAL: Approval completed successfully
-📊 Stage Data: {
-  "approval_design": "Here is a detailed approval workflow...",
-  "approval_levels": ["Level 1", "Level 2", "Level 3"],
-  "approval_timestamp": "2025-08-24T10:43:09.300994",
-  "approval_status": "approved"
-}
-
-🔄 [2025-08-24 10:43:09] FINALIZATION: Starting finalization and reporting
-
-🔄 [2025-08-24 10:43:09] FINALIZATION: Finalization completed successfully
-📊 Stage Data: {
-  "workflow_summary": "Workflow data_001 completed successfully",
-  "total_stages": 10,
-  "completion_timestamp": "2025-08-24T10:43:09.303990",
-  "performance_metrics": {
-    "total_duration": "5 minutes",
-    "stages_completed": 10,
-    "success_rate": "100%"
-  }
-}
-
-🎉 Workflow completed successfully!
-============================================================
-
-📊 Data Workflow Result: completed
-
-🏢 Example 3: Standard Business Workflow
-----------------------------------------
-🔄 Resuming existing workflow: business_001
-🚀 Starting Complex Workflow: business_001
-============================================================
-
-🔄 [2025-08-24 10:43:09] PLANNING: Starting workflow analysis and planning
-
-🔄 [2025-08-24 10:43:32] PLANNING: Planning completed successfully
-📊 Stage Data: {
-  "plan": "### Employee Onboarding Workflow Execution Plan...",
-  "input_analysis": {...},
-  "planning_timestamp": "2025-08-24T10:43:32.388369"
-}
-
-🔄 [2025-08-24 10:43:32] DATA_PROCESSING: Starting data processing and validation
-
-🔄 [2025-08-24 10:43:49] DATA_PROCESSING: Data processing completed successfully
-📊 Stage Data: {
-  "pipeline_design": "## Data Processing Workflow for Employee Onboarding...",
-  "validation_rules": ["data_format", "data_range", "data_completeness"],
-  "processing_timestamp": "2025-08-24T10:43:49.812785",
-  "records_processed": 3
-}
-
-🔄 [2025-08-24 10:43:49] BUSINESS_LOGIC: Starting business logic execution
-
-🔄 [2025-08-24 10:43:49] BUSINESS_LOGIC: Business logic executed successfully
-📊 Stage Data: {
-  "business_logic": {
-    "type": "standard",
-    "rules": ["business_validation", "data_integrity", "process_compliance"],
-    "workflow": ["input_validation", "processing", "output_generation"],
-    "quality": ["error_handling", "logging", "monitoring"]
-  },
-  "workflow_type": "standard",
-  "execution_timestamp": "2025-08-24T10:43:49.816252",
-  "business_rules_applied": 3
-}
-
-🔄 [2025-08-24 10:43:49] APPROVAL: Starting approval and decision making
-
-🔄 [2025-08-24 10:43:49] APPROVAL: Approval completed successfully
-📊 Stage Data: {
-  "approval_design": "Here's the designed approval workflow...",
-  "approval_levels": ["Level 1", "Level 2", "Level 3"],
-  "approval_timestamp": "2025-08-24T10:43:49.899147",
-  "approval_status": "approved"
-}
-
-🔄 [2025-08-24 10:43:49] FINALIZATION: Starting finalization and reporting
-
-🔄 [2025-08-24 10:43:49] FINALIZATION: Finalization completed successfully
-📊 Stage Data: {
-  "workflow_summary": "Workflow business_001 completed successfully",
-  "total_stages": 5,
-  "completion_timestamp": "2025-08-24T10:43:49.903448",
-  "performance_metrics": {
-    "total_duration": "5 minutes",
-    "stages_completed": 5,
-    "success_rate": "100%"
-  }
-}
-
-🎉 Workflow completed successfully!
-============================================================
-
-📊 Business Workflow Result: completed
-
-📋 Workflow States Summary
-========================================
-🆔 business_001: completed (Stage: finalization)
-🆔 data_001: completed (Stage: finalization)
-🆔 financial_001: completed (Stage: finalization)
-
-🎉 Complex workflows demonstration completed!
+05_workflows/
+├── main.py                 # Main workflow execution script
+├── workflow_manager.py     # Workflow orchestration and state management
+├── agents/                 # Workflow agents
+│   ├── business_agent.py   # Business logic analysis
+│   ├── approval_agent.py   # Decision approval
+│   └── finalization_agent.py # Plan execution
+├── workflow_states.db      # SQLite database for state persistence
+├── react_ui/              # Simple React web interface
+│   ├── app.py             # Flask backend API
+│   ├── src/               # React frontend components
+│   └── package.json       # Node.js dependencies
+└── README.md              # This file
 ```
 
-## Successful Workflow Execution Results
+## 🛠️ Setup & Installation
 
-The workflows example successfully demonstrated:
-
-### ✅ **All Three Workflows Completed Successfully**
-- **Financial Approval Workflow**: 10 stages completed with 100% success rate
-- **Data Processing Workflow**: 10 stages completed with 100% success rate  
-- **Standard Business Workflow**: 5 stages completed with 100% success rate
-
-### 📊 **Performance Metrics**
-- **Total Duration**: ~5 minutes for complete workflow execution
-- **Success Rate**: 100% across all workflows
-- **Stage Completion**: All planning, data processing, business logic, approval, and finalization stages completed
-- **State Persistence**: Workflows resumed from previous states when re-run
-
-### 🔄 **State Management Demonstrated**
-- **Workflow Resumption**: Existing workflows were resumed from previous states
-- **Stage Persistence**: Each stage's data and status were properly saved
-- **Database Integration**: SQLite database successfully stored workflow states
-- **Progress Tracking**: Real-time progress updates throughout execution
-
-## Key Features Demonstrated
-
-### 🚀 **Workflow Orchestration**
-- **Multi-Stage Execution**: 5-stage workflow with clear progression
-- **State Management**: Persistent workflow states with SQLite database
-- **Conditional Logic**: Different business logic based on workflow type
-- **Error Handling**: Comprehensive error handling with recovery options
-
-### 🧠 **Specialized Agents**
-- **Workflow Orchestrator**: Plans and coordinates workflow execution
-- **Data Processor**: Handles data transformation and validation
-- **Approval Manager**: Manages approval workflows and decision gates
-
-### 📊 **State Management**
-- **Persistent Storage**: Workflow states saved to SQLite database
-- **Resume Capability**: Workflows can be paused and resumed
-- **State Recovery**: Failed workflows can be recovered and restarted
-- **Progress Tracking**: Monitor workflow progress and completion
-
-### 🔄 **Error Handling & Recovery**
-- **Stage-Level Error Handling**: Each stage has its own error handling
-- **Recovery Options**: Multiple recovery strategies (retry, skip, pause, rollback)
-- **Error Logging**: Comprehensive error logging and reporting
-- **Graceful Degradation**: Handle failures without losing progress
-
-## Workflow Types
-
-### 💰 **Financial Approval Workflow**
-- **Purpose**: Handle financial requests and approvals
-- **Stages**: Budget validation, approval hierarchy, compliance checks
-- **Output**: Approved/rejected financial requests with audit trail
-
-### 📊 **Data Processing Workflow**
-- **Purpose**: Transform and validate data
-- **Stages**: Data extraction, transformation, validation, loading
-- **Output**: Processed data with quality metrics
-
-### 🏢 **Standard Business Workflow**
-- **Purpose**: Handle general business processes
-- **Stages**: Input validation, processing, output generation
-- **Output**: Completed business processes with documentation
-
-## Running the Examples
-
-### Basic Workflows Demonstration
+### **1. Install Dependencies**
 ```bash
-python workflows.py
+pip install agno openai python-dotenv
 ```
 
-### Extended Workflow Testing
+### **2. Environment Configuration**
+Create a `.env` file:
 ```bash
-python workflow_test.py
+OPENAI_API_KEY=your_openai_api_key_here
 ```
 
-## Workflow Testing Suite
+### **3. Run the Workflow**
+```bash
+python main.py
+```
 
-The `workflow_test.py` script demonstrates:
+## 🌐 Web Interface
 
-1. **Workflow Persistence**: Pause, resume, and recover workflows
-2. **Error Handling**: Test error conditions and recovery mechanisms
-3. **Concurrent Execution**: Run multiple workflows simultaneously
-4. **Performance Metrics**: Track workflow performance and timing
-5. **Customization**: Test domain-specific workflow types
-6. **State Inspection**: Analyze workflow states and progress
+### **Simple React UI**
+We've created a clean, simple React-based web interface to visualize workflows:
 
-## Advanced Capabilities
+#### **Start the Backend**
+```bash
+cd react_ui
+python app.py
+```
+- **Port**: 5001
+- **API**: http://localhost:5001/api/workflows
 
-### 🔄 **Concurrent Workflow Execution**
-- **Multiple Workflows**: Run several workflows simultaneously
-- **Resource Management**: Efficient resource allocation across workflows
-- **Performance Monitoring**: Track concurrent execution metrics
-- **Scalability**: Handle increasing workflow loads
+#### **Start the Frontend**
+```bash
+cd react_ui
+npm start
+```
+- **Port**: 3000
+- **URL**: http://localhost:3000
 
-### 📈 **Performance Monitoring**
-- **Execution Metrics**: Track workflow duration and stage completion
-- **Success Rates**: Monitor workflow success and failure rates
-- **Resource Usage**: Track resource consumption and performance
-- **Real-time Monitoring**: Live workflow status and progress
+### **Features**
+- **Clean Table Display**: Simple workflow table with status badges
+- **Real-time Data**: Fetches workflow data from Python backend
+- **Status Indicators**: Color-coded status badges for different states
+- **Responsive Design**: Works on desktop and mobile devices
 
-### 🎯 **Workflow Customization**
-- **Domain-Specific Workflows**: Adapt workflows for different industries
-- **Custom Stages**: Add new workflow stages and logic
-- **Business Rules**: Implement domain-specific business rules
-- **Compliance**: Ensure workflows meet regulatory requirements
+## 🔄 Workflow Execution
 
-## Customization Options
+### **Workflow Stages**
 
-### Adding New Workflow Types
-- Create new workflow classes extending `ComplexWorkflow`
-- Implement domain-specific business logic
-- Add custom validation and processing rules
-- Integrate with external systems and APIs
+1. **Business Logic** (`business_logic`)
+   - Analyzes business requirements
+   - Creates strategic plans
+   - Generates business insights
 
-### Modifying Workflow Stages
-- Update workflow execution logic
-- Add new stages and dependencies
-- Implement custom error handling
-- Add stage-specific monitoring and metrics
+2. **Approval** (`approval`)
+   - Reviews business plans
+   - Makes approval decisions
+   - Provides feedback and suggestions
 
-### Custom State Management
-- Extend workflow state classes
-- Add custom state fields and data
-- Implement custom persistence strategies
-- Add state validation and integrity checks
+3. **Finalization** (`finalization`)
+   - Executes approved plans
+   - Generates final reports
+   - Completes workflow
 
-## Performance Considerations
+### **Status Tracking**
+- **Pending**: Workflow created, waiting to start
+- **Running**: Currently executing a stage
+- **Completed**: All stages finished successfully
+- **Failed**: Error occurred, needs attention
 
-- **State Persistence**: SQLite for development, production databases for scale
-- **Concurrent Execution**: Limit based on system resources and API limits
-- **Error Recovery**: Implement appropriate retry strategies and timeouts
-- **Monitoring**: Set up alerts for workflow failures and performance issues
+## 📊 Database Schema
 
-## Best Practices
+The `workflow_states.db` contains:
 
-### Workflow Design
-- **Clear Stage Definition**: Define clear inputs, outputs, and dependencies
-- **Error Handling**: Implement comprehensive error handling at each stage
-- **State Management**: Ensure state consistency across workflow stages
-- **Monitoring**: Track workflow progress and performance metrics
+```sql
+CREATE TABLE workflow_states (
+    id TEXT PRIMARY KEY,
+    stage TEXT NOT NULL,
+    status TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    stage_data TEXT
+);
+```
 
-### Performance Optimization
-- **Resource Management**: Efficiently allocate resources across workflows
-- **Caching**: Cache frequently accessed data and states
-- **Parallelization**: Execute independent stages in parallel
-- **Batch Processing**: Group similar operations for efficiency
+## 🎮 Usage Examples
 
-### Error Recovery
-- **Retry Strategies**: Implement appropriate retry logic for transient failures
-- **Rollback Mechanisms**: Provide rollback capabilities for failed workflows
-- **Manual Intervention**: Allow manual intervention for complex failures
-- **Audit Trails**: Maintain comprehensive audit trails for compliance
+### **Basic Workflow Execution**
+```python
+from workflow_manager import WorkflowManager
 
-## Next Steps
+# Create workflow manager
+manager = WorkflowManager()
 
-After mastering this example, you'll have completed the full Agno learning series:
+# Execute workflow
+workflow_id = manager.execute_workflow("business_analysis")
+print(f"Workflow {workflow_id} started")
+```
 
-- **Level 1**: Basic tools and instructions ✅
-- **Level 2**: Knowledge storage and retrieval ✅
-- **Level 3**: Memory, reasoning, and session persistence ✅
-- **Level 4**: Multi-agent collaboration and team coordination ✅
-- **Level 5**: Complex agentic workflows with state management ✅
+### **Monitor Workflow Status**
+```python
+# Check workflow status
+status = manager.get_workflow_status(workflow_id)
+print(f"Status: {status}")
 
-## 🔧 Troubleshooting
+# Get workflow details
+details = manager.get_workflow_details(workflow_id)
+print(f"Current stage: {details['stage']}")
+```
 
-### Common Issues
+## 🔍 Monitoring & Debugging
 
-1. **Workflow Failures**: Check error logs and recovery options
-2. **State Persistence Issues**: Verify database permissions and connectivity
-3. **Performance Issues**: Monitor resource usage and concurrent execution
-4. **API Rate Limits**: Manage OpenAI API usage across multiple workflows
+### **Real-time Status**
+- Monitor workflow progress in real-time
+- View current stage and status
+- Track execution time and performance
 
-### Solutions
+### **Error Handling**
+- Automatic retry mechanisms
+- Detailed error logging
+- Graceful failure recovery
 
-- **Check Error Logs**: Review detailed error messages and recovery options
-- **Verify Database**: Ensure SQLite database is accessible and writable
-- **Monitor Resources**: Track system resources and API usage
-- **Implement Retries**: Add retry logic for transient failures
+### **Web Interface**
+- View all workflows in a clean table
+- Monitor status changes
+- Refresh data in real-time
 
-## Resources
+## 🚀 Next Steps
 
-- [Agno Documentation](https://github.com/agno-agi/agno)
-- [Workflow Best Practices](https://github.com/agno-agi/agno/tree/main/cookbook/workflows)
-- [State Management Patterns](https://github.com/agno-agi/agno/tree/main/cookbook/patterns)
-- [Multi-Agent Systems](https://github.com/agno-agi/agno/tree/main/cookbook/agent_levels)
+This example demonstrates the foundation for building complex agentic workflows. You can extend it by:
+
+1. **Adding More Stages**: Implement additional workflow stages
+2. **Enhanced Error Handling**: Add more sophisticated retry logic
+3. **Workflow Templates**: Create reusable workflow patterns
+4. **Advanced Monitoring**: Add performance metrics and analytics
+5. **Integration**: Connect with external systems and APIs
+
+## 📚 Key Concepts
+
+- **Workflow Orchestration**: Coordinating multiple agents in sequence
+- **State Persistence**: Maintaining workflow state across sessions
+- **Error Recovery**: Handling failures gracefully
+- **Real-time Monitoring**: Tracking progress and performance
+- **Agent Coordination**: Managing agent interactions and data flow
+
+## 🎯 Success Criteria
+
+✅ **Workflow Creation**: Successfully create multi-stage workflows  
+✅ **State Persistence**: Maintain state across sessions  
+✅ **Error Handling**: Gracefully handle and recover from failures  
+✅ **Real-time Monitoring**: Track progress and status updates  
+✅ **Web Interface**: View workflows in a clean, simple table format  
 
 ---
 
-**🎉 Congratulations! You've completed the full Agno learning series!** 
-
-From basic tools to complex workflows, you now have a comprehensive understanding of building intelligent, multi-agent systems with Agno. Ready to build your own production-ready AI applications? 🚀
+**Level 5 Complete!** 🎉 You've now mastered complex agentic workflows with state management, persistence, and real-time monitoring. This represents the highest level of sophistication in the Agno framework!
