@@ -68,7 +68,7 @@ def get_workflow_stats():
         
         # Get recent workflows
         cursor.execute("""
-            SELECT workflow_id, workflow_type, status, current_stage, created_at, updated_at
+            SELECT workflow_id, status, current_stage, created_at, updated_at
             FROM workflow_states 
             ORDER BY updated_at DESC 
             LIMIT 5
@@ -77,7 +77,7 @@ def get_workflow_stats():
         for row in cursor.fetchall():
             recent_workflows.append({
                 'id': row['workflow_id'],
-                'type': row['workflow_type'],
+                'type': 'Workflow',  # Default type since it's not in schema
                 'status': row['status'],
                 'stage': row['current_stage'],
                 'created': row['created_at'],
@@ -142,7 +142,7 @@ def api_workflows():
     try:
         cursor = conn.cursor()
         cursor.execute("""
-            SELECT workflow_id, workflow_type, status, current_stage, 
+            SELECT workflow_id, status, current_stage, 
                    stage_data, created_at, updated_at
             FROM workflow_states 
             ORDER BY updated_at DESC
@@ -152,7 +152,7 @@ def api_workflows():
         for row in cursor.fetchall():
             workflows.append({
                 'id': row['workflow_id'],
-                'type': row['workflow_type'],
+                'type': 'Workflow',  # Default type since it's not in schema
                 'status': row['status'],
                 'stage': row['current_stage'],
                 'stage_data': row['stage_data'],
